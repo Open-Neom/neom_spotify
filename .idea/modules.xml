@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/neom_inbox.iml" filepath="$PROJECT_DIR$/.idea/neom_inbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/neom_spotify.iml" filepath="$PROJECT_DIR$/.idea/neom_spotify.iml" />
     </modules>
   </component>
 </project>

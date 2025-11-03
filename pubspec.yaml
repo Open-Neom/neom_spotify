@@ -1,27 +1,31 @@
-name: neom_inbox
-description: Inbox and Inbox Rooms for Cyberneom.
+name: neom_spotify
+description: Spotify API Calls for Open Neom
 version: 1.2.0
-homepage: https://github.com/Cyberneom/neom_inbox
+homepage: https://github.com/Cyberneom/neom_spotify
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.19.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
+  neom_core:
+    git:
+      url: git@github.com:Cyberneom/neom_core.git
   neom_commons:
     git:
       url: git@github.com:Cyberneom/neom_commons.git
-  neom_posts:
-    git:
-      url: git@github.com:Cyberneom/neom_posts.git
+
+  spotify: ^0.13.7
+  spotify_sdk: ^3.0.2
+  percent_indicator: ^4.2.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
