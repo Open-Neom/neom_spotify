@@ -102,10 +102,6 @@ class MediaItemSpotifyMapper {
 
     List<AppMediaItem> songs = [];
 
-    ///DEPRECATED
-    // String artistName = "";
-    // String albumImgUrl = "";
-
     try {
       for (var playlistTrack in tracks.itemsNative!) {
         Track track = Track.fromJson(playlistTrack["track"]);
