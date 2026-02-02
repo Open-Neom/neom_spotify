@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:sint/sint.dart';
 import 'package:neom_commons/ui/theme/app_color.dart';
 import 'package:neom_commons/ui/theme/app_theme.dart';
 import 'package:neom_commons/ui/widgets/appbar_child.dart';
@@ -18,7 +18,7 @@ class PlaylistItemsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<NeomSpotifyController>(
+    return SintBuilder<NeomSpotifyController>(
       id: AppPageIdConstants.playlistSong,
       builder: (controller) => Scaffold(
         appBar: AppBarChild(title: controller.spotifyItemlist.name.length > AppConstants.maxItemlistNameLength
@@ -33,7 +33,7 @@ class PlaylistItemsPage extends StatelessWidget {
           FloatingActionButton(
           tooltip: CommonTranslationConstants.addItem.tr,
           onPressed: ()=>{
-            Get.toNamed(AppRouteConstants.spotifyPlaylists,
+            Sint.toNamed(AppRouteConstants.spotifyPlaylists,
                 arguments: [MediaSearchType.song, controller.spotifyItemlist])
           },
           child: const Icon(Icons.navigate_next),

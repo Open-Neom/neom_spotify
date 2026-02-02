@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:sint/sint.dart';
 import 'package:neom_commons/utils/constants/app_page_id_constants.dart';
 import 'package:neom_commons/utils/constants/translations/message_translation_constants.dart';
 import 'package:neom_core/app_config.dart';
@@ -23,9 +23,9 @@ import '../domain/use_cases/neom_spotify_service.dart';
 import '../utils/media_item_spotify_mapper.dart';
 import 'sync/spotify_playlist_page.dart';
 
-class NeomSpotifyController extends GetxController implements NeomSpotifyService  {
+class NeomSpotifyController extends SintController implements NeomSpotifyService  {
 
-  final userServiceImpl = Get.find<UserService>();
+  final userServiceImpl = Sint.find<UserService>();
 
   Itemlist currentItemlist = Itemlist();
   Itemlist spotifyItemlist = Itemlist();
@@ -71,18 +71,18 @@ class NeomSpotifyController extends GetxController implements NeomSpotifyService
       ownerName = profile.name;
       itemlistType = AppConfig.instance.defaultItemlistType;
 
-      if(Get.arguments != null) {
-        if(Get.arguments.isNotEmpty && Get.arguments[0] is Band) {
-          if(Get.arguments[0] is Band) {
-            band = Get.arguments[0];
+      if(Sint.arguments != null) {
+        if(Sint.arguments.isNotEmpty && Sint.arguments[0] is Band) {
+          if(Sint.arguments[0] is Band) {
+            band = Sint.arguments[0];
             ownerId = band.id;
             ownerName = band.name;
             ownerType = OwnerType.band;
 
             userServiceImpl.band = band;
             userServiceImpl.itemlistOwnerType = OwnerType.band;
-          } else if(Get.arguments[0] is ItemlistType) {
-            itemlistType = Get.arguments[0];
+          } else if(Sint.arguments[0] is ItemlistType) {
+            itemlistType = Sint.arguments[0];
           }
         }
       }
@@ -166,7 +166,7 @@ class NeomSpotifyController extends GetxController implements NeomSpotifyService
       AppConfig.logger.e(e.toString());
     }
 
-    await Get.toNamed(AppRouteConstants.listItems, arguments: [itemlist, true]);
+    await Sint.toNamed(AppRouteConstants.listItems, arguments: [itemlist, true]);
     update([AppPageIdConstants.itemlist, AppPageIdConstants.itemlistItem]);
   }
 
@@ -227,7 +227,7 @@ class NeomSpotifyController extends GetxController implements NeomSpotifyService
 
       if(wereSynchronized.values.firstWhere((element) => true)) {
         ProfileFirestore().updateLastSpotifySync(userServiceImpl.profile.id);
-        Get.toNamed(AppRouteConstants.finishingSpotifySync, arguments: [AppRouteConstants.finishingSpotifySync]);
+        Sint.toNamed(AppRouteConstants.finishingSpotifySync, arguments: [AppRouteConstants.finishingSpotifySync]);
       } else {
         AppConfig.logger.i("No giglist was updated. Each one is up to date");
       }
@@ -331,7 +331,7 @@ class NeomSpotifyController extends GetxController implements NeomSpotifyService
         AppConfig.logger.d("Items added successfully from Itemlist");
         wasSync = true;
       } else {
-        Get.snackbar(
+        Sint.snackbar(
             MessageTranslationConstants.spotifySynchronization.tr,
             "Playlist ${itemlist.name} ${MessageTranslationConstants.upToDate.tr}",
             snackPosition: SnackPosition.bottom,
@@ -379,9 +379,9 @@ class NeomSpotifyController extends GetxController implements NeomSpotifyService
           }
         }
 
-        Get.to(() => const SpotifyPlaylistsPage(), transition: Transition.rightToLeft);
+        Sint.to(() => const SpotifyPlaylistsPage(), transition: Transition.rightToLeft);
         ///DEPRECATED
-        // Get.toNamed(AppRouteConstants.spotifyPlaylists);
+        // Sint.toNamed(AppRouteConstants.spotifyPlaylists);
       }
     } catch(e) {
       AppConfig.logger.e(e.toString());
