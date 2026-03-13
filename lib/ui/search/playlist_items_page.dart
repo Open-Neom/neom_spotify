@@ -24,7 +24,7 @@ class PlaylistItemsPage extends StatelessWidget {
         appBar: AppBarChild(title: controller.spotifyItemlist.name.length > AppConstants.maxItemlistNameLength
             ? "${controller.spotifyItemlist.name.substring(0, AppConstants.maxItemlistNameLength)}..."
             : controller.spotifyItemlist.name),
-        backgroundColor: AppColor.main50,
+        backgroundColor: AppColor.scaffold,
         body: Container(
           decoration: AppTheme.appBoxDecoration,
           child: buildSyncPlaylistList(context, controller)

@@ -1,5 +1,6 @@
 
-import 'package:neom_core/app_properties.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:neom_core/cloud_properties.dart';
 import 'package:spotify/spotify.dart';
 
 class NeomSpotifyConstants {
@@ -15,10 +16,15 @@ class NeomSpotifyConstants {
 
   static const String meUrl = 'https://api.spotify.com/v1/me';
 
+  /// Returns Spotify API credentials.
+  /// On web, Spotify SDK is not available — returns empty credentials.
   static SpotifyApiCredentials getSpotifyCredentials({String accessToken = ""}) {
+    if (kIsWeb) {
+      return SpotifyApiCredentials('', '', accessToken: accessToken, scopes: scopes);
+    }
     return SpotifyApiCredentials(
-        AppProperties.getSpotifyClientId(),
-        AppProperties.getSpotifyClientSecret(),
+        CloudProperties.getSpotifyClientId(),
+        CloudProperties.getSpotifyClientSecret(),
         accessToken: accessToken,
         scopes: scopes,
     );

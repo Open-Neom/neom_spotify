@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:neom_core/app_config.dart';
-import 'package:neom_core/app_properties.dart';
+import 'package:neom_core/cloud_properties.dart';
 import 'package:spotify/spotify.dart' as spotify;
 import 'package:spotify_sdk/spotify_sdk.dart';
 
@@ -16,20 +17,26 @@ class SpotifyApiCalls {
 
 
   String requestAuthorization() => 'https://accounts.spotify.com/authorize?client_id='
-      '${AppProperties.getSpotifyClientId()}&response_type=code&redirect_uri=${NeomSpotifyConstants.redirectUrl}&'
+      '${CloudProperties.getSpotifyClientId()}&response_type=code&redirect_uri=${NeomSpotifyConstants.redirectUrl}&'
       'scope=${NeomSpotifyConstants.scopes.join('%20')}';
 
 
   static Future<String> getSpotifyToken() async {
+    // SpotifySdk is not available on web — return early
+    if (kIsWeb) {
+      AppConfig.logger.w('SpotifySdk not available on web');
+      return '';
+    }
+
     AppConfig.logger.d('Getting access and Spotify Token');
     String spotifyToken = '';
 
     if(await SpotifySdk.connectToSpotifyRemote(
-      clientId: AppProperties.getSpotifyClientId(),
+      clientId: CloudProperties.getSpotifyClientId(),
       redirectUrl: NeomSpotifyConstants.redirectUrl,)
     ) {
       spotifyToken = await SpotifySdk.getAccessToken(
-          clientId: AppProperties.getSpotifyClientId(),
+          clientId: CloudProperties.getSpotifyClientId(),
           redirectUrl: NeomSpotifyConstants.redirectUrl,
           scope: NeomSpotifyConstants.scope,
       );
@@ -138,8 +145,10 @@ class SpotifyApiCalls {
     String? code,
     String? refreshToken,
   }) async {
-    final String clientID = AppProperties.getSpotifyClientId();
-    final String clientSecret = AppProperties.getSpotifyClientSecret();
+    if (kIsWeb) return [];
+
+    final String clientID = CloudProperties.getSpotifyClientId();
+    final String clientSecret = CloudProperties.getSpotifyClientSecret();
 
     final Map<String, String> headers = {
       'Authorization': "Basic ${base64.encode(utf8.encode("$clientID:$clientSecret"))}",
@@ -298,10 +307,12 @@ class SpotifyApiCalls {
   }
 
   static Future<spotify.Track> getTrackById(String trackId) async {
+    if (kIsWeb) return spotify.Track();
+
     final spotifyApi = spotify.SpotifyApi(
         spotify.SpotifyApiCredentials(
-          AppProperties.getSpotifyClientId(),
-          AppProperties.getSpotifyClientSecret(),
+          CloudProperties.getSpotifyClientId(),
+          CloudProperties.getSpotifyClientSecret(),
         )
     );
 

@@ -10,6 +10,8 @@ import '../../utils/media_item_spotify_mapper.dart';
 
 class SpotifySearch {
 
+  /// Lazy-initialized Spotify API client.
+  /// On web, credentials are empty — calls will fail gracefully.
   static SpotifyApi spotify = SpotifyApi(NeomSpotifyConstants.getSpotifyCredentials());
   static Map<String, AppMediaItem> songs = {};
   static Map<String, Itemlist> giglists = {};

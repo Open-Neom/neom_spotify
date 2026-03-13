@@ -66,7 +66,7 @@ Widget buildSyncPlaylistList(BuildContext context, NeomSpotifyController control
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Chip(
-                backgroundColor: AppColor.main50,
+                backgroundColor: AppColor.surfaceBright,
                 avatar: CircleAvatar(
                   backgroundColor: AppColor.white80,
                   child: Obx(()=>controller.isLoading.value && controller.currentItemlist.href == spotifyItemlist.href

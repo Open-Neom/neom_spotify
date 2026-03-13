@@ -40,12 +40,14 @@ class MediaItemSpotifyMapper {
     List<AppMediaItem> appMediaItems = [];
 
     if(itemlist.appMediaItems != null) {
-      appMediaItems.addAll(itemlist.appMediaItems!);
+      appMediaItems.addAll(itemlist.appMediaItems!.where((item) => item.isAudioContent));
     }
 
     if(itemlist.appReleaseItems != null) {
       for (var element in itemlist.appReleaseItems!) {
-        appMediaItems.add(AppMediaItemMapper.fromAppReleaseItem(element));
+        if (element.isAudioContent) {
+          appMediaItems.add(AppMediaItemMapper.fromAppReleaseItem(element));
+        }
       }
     }
 

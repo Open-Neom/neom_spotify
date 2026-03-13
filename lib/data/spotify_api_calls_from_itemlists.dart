@@ -1,6 +1,7 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'package:neom_core/app_config.dart';
-import 'package:neom_core/app_properties.dart';
+import 'package:neom_core/cloud_properties.dart';
 import 'package:spotify/spotify.dart' as spotify;
 import 'package:spotify_sdk/spotify_sdk.dart';
 
@@ -9,15 +10,21 @@ import '../utils/constants/neom_spotify_constants.dart';
 class SpotifyApiCalls {
 
   static Future<String> getSpotifyToken() async {
+    // SpotifySdk is not available on web — return early
+    if (kIsWeb) {
+      AppConfig.logger.w('SpotifySdk not available on web');
+      return '';
+    }
+
     AppConfig.logger.d("Getting access and Spotify Token");
     String spotifyToken = "";
 
     if(await SpotifySdk.connectToSpotifyRemote(
-      clientId: AppProperties.getSpotifyClientId(),
+      clientId: CloudProperties.getSpotifyClientId(),
       redirectUrl: NeomSpotifyConstants.redirectUrl,)
     ) {
       spotifyToken = await SpotifySdk.getAccessToken(
-          clientId: AppProperties.getSpotifyClientId(),
+          clientId: CloudProperties.getSpotifyClientId(),
           redirectUrl: NeomSpotifyConstants.redirectUrl,
           scope: NeomSpotifyConstants.scope
       );
