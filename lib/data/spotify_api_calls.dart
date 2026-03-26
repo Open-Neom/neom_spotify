@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:neom_core/app_config.dart';
+import 'package:neom_core/utils/neom_error_logger.dart';
 import 'package:neom_core/cloud_properties.dart';
 import 'package:spotify/spotify.dart' as spotify;
 import 'package:spotify_sdk/spotify_sdk.dart';
@@ -54,8 +55,8 @@ class SpotifyApiCalls {
 
     try {
       spotifyUser = await spotifyApi.me.get();
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'getUserProfile');
     }
 
     AppConfig.logger.i('The spotify userName is ${spotifyUser.displayName}');
@@ -70,8 +71,8 @@ class SpotifyApiCalls {
     try {
       spotifyPlaylists = await spotifyApi.playlists.getUsersPlaylists(userId, 100).all();
       AppConfig.logger.i('${spotifyPlaylists.length} playlists where retrieved from Spotify');
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'getUserPlaylistSimples');
     }
 
     AppConfig.logger.i('${spotifyPlaylists.length} were retrieved for Spotify User Id $userId');
@@ -95,8 +96,8 @@ class SpotifyApiCalls {
           playlists.add(await spotifyApi.playlists.get(spotifyPlaylist.id!));
         }
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'getUserPlaylists');
     }
 
     AppConfig.logger.i('${playlists.length} were retrieved for Spotify User Id $userId');
@@ -116,8 +117,8 @@ class SpotifyApiCalls {
           'Authorization': 'Bearer $spotifyToken',
         },
       );
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'getUserTopItems');
     }
 
 
@@ -134,8 +135,8 @@ class SpotifyApiCalls {
       playlist = await spotifyApi.playlists.get(playlistId);
       AppConfig.logger.i('Playlist ${playlist.name} were retrieved from Spotify');
 
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'getPlaylist');
     }
 
     return playlist;
@@ -188,8 +189,8 @@ class SpotifyApiCalls {
           'Error in getAccessToken, called: $path, returned: ${response.statusCode}',
         );
       }
-    } catch (e) {
-      AppConfig.logger.e('Error in getting spotify access token: $e');
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'getAccessToken');
     }
     return [];
   }
@@ -248,8 +249,8 @@ class SpotifyApiCalls {
         AppConfig.logger.e(
           'Error in getHundredTracksOfPlaylist, called: $path, returned: ${response.statusCode}',);
       }
-    } catch (e) {
-      AppConfig.logger.e('Error in getting spotify playlist tracks: $e');
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'getHundredTracksOfPlaylist');
     }
     return {};
   }

@@ -3,6 +3,7 @@ import 'package:sint/sint.dart';
 import 'package:neom_commons/utils/constants/app_page_id_constants.dart';
 import 'package:neom_commons/utils/constants/translations/message_translation_constants.dart';
 import 'package:neom_core/app_config.dart';
+import 'package:neom_core/utils/neom_error_logger.dart';
 import 'package:neom_core/data/firestore/app_media_item_firestore.dart';
 import 'package:neom_core/data/firestore/itemlist_firestore.dart';
 import 'package:neom_core/data/firestore/profile_firestore.dart';
@@ -94,8 +95,8 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
         itemlists.value = Map.from(band.itemlists ?? {});
       }
 
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'onInit');
     }
 
   }
@@ -162,8 +163,8 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
         itemlist.appMediaItems = MediaItemSpotifyMapper.mapTracksToSongs(spotifyPlaylist.tracks!);
         AppConfig.logger.d("${itemlist.appMediaItems?.length ?? 0} songs were mapped from ${spotifyPlaylist.name}");
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'gotoPlaylistSongs');
     }
 
     await Sint.toNamed(AppRouteConstants.listItems, arguments: [itemlist, true]);
@@ -183,8 +184,8 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
         addedItemlists.add(spotifyItemlist);
         totalItemsToSync += spotifyPlaylistSimples.value.where((element) => element.id == spotifyItemlist.id).first.tracksLink?.total ?? 0;
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'handlePlaylistList');
     }
 
     update([AppPageIdConstants.playlistSong]);
@@ -231,8 +232,8 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
       } else {
         AppConfig.logger.i("No giglist was updated. Each one is up to date");
       }
-    } catch(e) {
-      AppConfig.logger.e(e.toString());
+    } catch(e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'synchronizeItemlists');
     }
 
 
@@ -339,8 +340,8 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
         );
       }
       isButtonDisabled.value = false;
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'synchronizeItemlist');
     }
 
     update();
@@ -383,8 +384,8 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
         ///DEPRECATED
         // Sint.toNamed(AppRouteConstants.spotifyPlaylists);
       }
-    } catch(e) {
-      AppConfig.logger.e(e.toString());
+    } catch(e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'synchronizeSpotifyPlaylists');
     }
 
     isLoading.value = false;

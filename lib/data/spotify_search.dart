@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:neom_core/app_config.dart';
+import 'package:neom_core/utils/neom_error_logger.dart';
 import 'package:neom_core/domain/model/app_media_item.dart';
 import 'package:neom_core/domain/model/item_list.dart';
 import 'package:spotify/spotify.dart';
@@ -24,15 +25,15 @@ class SpotifySearch {
           .get(searchParam.toLowerCase(),
             types: [SearchType.track])
           .first(20)
-          .catchError((err) {
-            AppConfig.logger.e(err.toString());
+          .catchError((err, st) {
+            NeomErrorLogger.recordError(err, st, module: 'neom_spotify', operation: 'searchSongs');
             return err;
           });
 
       await loadSongsFromSpotify(searchData);
 
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'searchSongs');
     }
 
     return songs;
@@ -55,8 +56,8 @@ class SpotifySearch {
           }
         }
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'loadSongsFromSpotify');
     }
 
   }
@@ -74,8 +75,8 @@ class SpotifySearch {
       AppConfig.logger.i("Retrieving playlists from Spotify");
       loadPlaylistsFromSpotify(searchData);
 
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'searchPlaylists');
     }
 
     return giglists;
@@ -95,8 +96,8 @@ class SpotifySearch {
           }
         }
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'loadPlaylistsFromSpotify');
     }
 
     AppConfig.logger.d("${giglists.length} playlists retrieved");
@@ -108,8 +109,8 @@ class SpotifySearch {
 
     try {
       artist = await spotify.artists.get(artistId);
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'loadArtistDetails');
     }
 
     return artist;
@@ -126,8 +127,8 @@ class SpotifySearch {
       if(playlist.tracks != null) {
         playlistSongs = MediaItemSpotifyMapper.mapTracksToSongs(playlist.tracks!);
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'loadSongsFromPlaylist');
     }
 
     return playlistSongs;

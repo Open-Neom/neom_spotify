@@ -1,5 +1,6 @@
 import 'package:neom_commons/utils/mappers/app_media_item_mapper.dart';
 import 'package:neom_core/app_config.dart';
+import 'package:neom_core/utils/neom_error_logger.dart';
 import 'package:neom_core/domain/model/app_media_item.dart';
 import 'package:neom_core/domain/model/genre.dart';
 import 'package:neom_core/domain/model/item_list.dart';
@@ -93,8 +94,8 @@ class MediaItemSpotifyMapper {
           permaUrl: track.externalUrls?.spotify ?? ''
       );
 
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'mapTrackToSong');
     }
 
     return song;
@@ -109,8 +110,8 @@ class MediaItemSpotifyMapper {
         Track track = Track.fromJson(playlistTrack["track"]);
         songs.add(mapTrackToSong(track));
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'mapTracksToSongs');
     }
 
     return songs;
@@ -124,8 +125,8 @@ class MediaItemSpotifyMapper {
       if (playlist.tracks != null && (playlist.tracks?.total ?? 0) > 1) {
         appMediaItems = mapTracksToSongs(playlist.tracks!);
       }
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_spotify', operation: 'mapPlaylistToItemlist');
     }
 
     return Itemlist(
