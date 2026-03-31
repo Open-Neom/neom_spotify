@@ -43,7 +43,7 @@ class SpotifyApiCalls {
       );
     }
 
-    AppConfig.logger.i('Spotify Token Retrieved $spotifyToken');
+    AppConfig.logger.i('Spotify Token Retrieved');
     return spotifyToken;
   }
 

@@ -1,3 +1,7 @@
+### 1.2.0 - Module Sync & Updates
+- Sync module with latest ecosystem changes
+- Update dependencies and internal references
+
 ### 1.1.0 - Major Architectural Refactor & Third-Party Specialization
 This release marks a major architectural refactor for neom_spotify, solidifying its role as the central module for all Spotify-related functionalities within the Open Neom ecosystem. The primary focus has been on achieving greater modularity, testability, and a clear separation of concerns, in line with the overarching Clean Architecture principles.
 

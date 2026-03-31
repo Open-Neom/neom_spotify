@@ -140,7 +140,7 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
     // String spotifyToken = '';
 
     if(spotifyToken.isNotEmpty) {
-      AppConfig.logger.t("Spotify access token is: $spotifyToken");
+      AppConfig.logger.t("Spotify access token retrieved");
       userServiceImpl.user.spotifyToken = spotifyToken;
       await UserFirestore().updateSpotifyToken(userServiceImpl.user.id, spotifyToken);
     }
@@ -363,7 +363,7 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
 
   @override
   Future<void> synchronizeSpotifyPlaylists() async {
-    AppConfig.logger.i("Getting Spotify Information with token: ${userServiceImpl.user.spotifyToken}");
+    AppConfig.logger.i("Getting Spotify Information");
 
     isLoading.value = true;
     update([AppPageIdConstants.itemlist]);
