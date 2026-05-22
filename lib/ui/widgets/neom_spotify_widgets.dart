@@ -17,7 +17,7 @@ Widget buildSyncPlaylistsButton(BuildContext context, NeomSpotifyController cont
       height: AppTheme.fullHeight(context) * 0.06,
       child: TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: AppColor.bondiBlue,
+          backgroundColor: AppColor.getReleaseShelfColor(),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         ),
         onPressed: () async {

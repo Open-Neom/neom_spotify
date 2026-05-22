@@ -10,7 +10,7 @@ import 'package:neom_core/data/firestore/profile_firestore.dart';
 import 'package:neom_core/data/firestore/user_firestore.dart';
 import 'package:neom_core/domain/model/app_media_item.dart';
 import 'package:neom_core/domain/model/app_profile.dart';
-import 'package:neom_core/domain/model/band.dart';
+import 'package:neom_core/domain/model/collective.dart';
 import 'package:neom_core/domain/model/item_list.dart';
 import 'package:neom_core/domain/use_cases/user_service.dart';
 import 'package:neom_core/utils/constants/app_route_constants.dart';
@@ -42,7 +42,7 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
   final RxList<spotify.PlaylistSimple> spotifyPlaylistSimples = <spotify.PlaylistSimple>[].obs;
 
   AppProfile profile = AppProfile();
-  Band band = Band();
+  Collective collective = Collective();
   String ownerId = '';
   String ownerName = '';
   OwnerType ownerType = OwnerType.profile;
@@ -73,15 +73,15 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
       itemlistType = AppConfig.instance.defaultItemlistType;
 
       if(Sint.arguments != null) {
-        if(Sint.arguments.isNotEmpty && Sint.arguments[0] is Band) {
-          if(Sint.arguments[0] is Band) {
-            band = Sint.arguments[0];
-            ownerId = band.id;
-            ownerName = band.name;
-            ownerType = OwnerType.band;
+        if(Sint.arguments.isNotEmpty && Sint.arguments[0] is Collective) {
+          if(Sint.arguments[0] is Collective) {
+            collective = Sint.arguments[0];
+            ownerId = collective.id;
+            ownerName = collective.name;
+            ownerType = OwnerType.collective;
 
-            userServiceImpl.band = band;
-            userServiceImpl.itemlistOwnerType = OwnerType.band;
+            userServiceImpl.collective = collective;
+            userServiceImpl.itemlistOwnerType = OwnerType.collective;
           } else if(Sint.arguments[0] is ItemlistType) {
             itemlistType = Sint.arguments[0];
           }
@@ -91,8 +91,8 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
       AppConfig.logger.t('Itemlists being loaded from ${ownerType.name}');
       if(ownerType == OwnerType.profile) {
         itemlists.value = Map.from(profile.itemlists ?? {});
-      } else if(ownerType == OwnerType.band){
-        itemlists.value = Map.from(band.itemlists ?? {});
+      } else if(ownerType == OwnerType.collective){
+        itemlists.value = Map.from(collective.itemlists ?? {});
       }
 
     } catch (e, st) {
@@ -264,7 +264,7 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
         existingItemlists = userServiceImpl.profile.itemlists?.values
             .where((element) => element.name == itemlist.name).toList();
       } else {
-        existingItemlists = userServiceImpl.band.itemlists?.values
+        existingItemlists = userServiceImpl.collective.itemlists?.values
             .where((element) => element.name == itemlist.name).toList();
       }
 
@@ -322,11 +322,11 @@ class NeomSpotifyController extends SintController implements NeomSpotifyService
             }
             AppMediaItemFirestore().existsOrInsert(appItem);
           }
-        } else if(ownerType == OwnerType.band) {
-          userServiceImpl.band.itemlists![itemlist.id] = itemlist;
+        } else if(ownerType == OwnerType.collective) {
+          userServiceImpl.collective.itemlists![itemlist.id] = itemlist;
           for (var appItem in itemlist.appMediaItems ?? []) {
             AppMediaItemFirestore().existsOrInsert(appItem);
-            //TODO Add sync for band itemlist
+            //TODO Add sync for collective itemlist
           }
         }
         AppConfig.logger.d("Items added successfully from Itemlist");
