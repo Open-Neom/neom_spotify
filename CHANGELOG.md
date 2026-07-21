@@ -1,3 +1,6 @@
+
+## [2.0.0-unreleased] - 2026-07-21
+- Refactor and compatibility updates for pubspec.lock.
 ### 1.2.0 - Module Sync & Updates
 - Sync module with latest ecosystem changes
 - Update dependencies and internal references
